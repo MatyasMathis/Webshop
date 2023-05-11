@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebshopAPI.Data;
 using WebshopAPI.Repositories;
+using WebshopAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<WebshopDbContext>(options =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<CategoryService>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 

@@ -6,5 +6,7 @@ namespace WebshopAPI.Repositories
     {
         Task<IEnumerable<Category>> GetAllCategories();
         Task<Category> Uploadcategory(Category category);
+        Task<Category> DeleteCategory(Guid id);
+        Task<Category> UpdateCategory(Guid id, Category category);
     }
 }
