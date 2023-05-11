@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebshopAPI.Data;
+using WebshopAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,11 @@ builder.Services.AddDbContext<WebshopDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Webshop"));
 });
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 

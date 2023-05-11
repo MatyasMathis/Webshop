@@ -74,3 +74,5 @@ C:\Users\User\OneDrive\Desktop\Facultate\DAWM\Proiect\Webshop API\Webshop\Websho
 C:\Users\User\OneDrive\Desktop\Facultate\DAWM\Proiect\Webshop API\Webshop\WebshopAPI\obj\Debug\net7.0\WebshopAPI.pdb
 C:\Users\User\OneDrive\Desktop\Facultate\DAWM\Proiect\Webshop API\Webshop\WebshopAPI\obj\Debug\net7.0\WebshopAPI.genruntimeconfig.cache
 C:\Users\User\OneDrive\Desktop\Facultate\DAWM\Proiect\Webshop API\Webshop\WebshopAPI\obj\Debug\net7.0\ref\WebshopAPI.dll
+C:\Users\User\OneDrive\Desktop\Facultate\DAWM\Proiect\Webshop API\Webshop\WebshopAPI\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\User\OneDrive\Desktop\Facultate\DAWM\Proiect\Webshop API\Webshop\WebshopAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
