@@ -3976,11 +3976,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Desktop\\Facultate\\DAWM\\Proiect\\Webshop API\\Webshop\\WebshopAPI\\WebshopAPI.csproj",
+      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Desktop\\Facultate\\DAWM\\Proiect\\Github-Webshop\\Webshop\\WebshopAPI\\WebshopAPI.csproj",
       "projectName": "WebshopAPI",
-      "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\Facultate\\DAWM\\Proiect\\Webshop API\\Webshop\\WebshopAPI\\WebshopAPI.csproj",
+      "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\Facultate\\DAWM\\Proiect\\Github-Webshop\\Webshop\\WebshopAPI\\WebshopAPI.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\OneDrive\\Desktop\\Facultate\\DAWM\\Proiect\\Webshop API\\Webshop\\WebshopAPI\\obj\\",
+      "outputPath": "C:\\Users\\User\\OneDrive\\Desktop\\Facultate\\DAWM\\Proiect\\Github-Webshop\\Webshop\\WebshopAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
