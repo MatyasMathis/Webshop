@@ -43,5 +43,16 @@ namespace WebshopAPI.Services
 
             return await categoryRepository.UpdateCategory(id, category);
         }
+        public async Task<Category> GetCategoryById(Guid id)
+        {
+            if (id == null )
+            {
+                return null;
+            }
+
+            return await categoryRepository.GetCategoryById(id);
+        }
+
+
     }
 }

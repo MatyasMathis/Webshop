@@ -28,6 +28,15 @@ namespace WebshopAPI.Repositories
             return await webshopDbContext.Categories.ToListAsync();
         }
 
+        public async Task<Category> GetCategoryById(Guid id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+            return await webshopDbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<Category> UpdateCategory(Guid id, Category category)
         {
             var catToUpdate = await webshopDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);

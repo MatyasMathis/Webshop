@@ -8,5 +8,6 @@ namespace WebshopAPI.Repositories
         Task<Category> Uploadcategory(Category category);
         Task<Category> DeleteCategory(Guid id);
         Task<Category> UpdateCategory(Guid id, Category category);
+        Task<Category> GetCategoryById(Guid id);
     }
 }

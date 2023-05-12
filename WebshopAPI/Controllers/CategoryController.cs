@@ -61,7 +61,7 @@ namespace WebshopAPI.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteWDAsync([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteCatAsync([FromRoute] Guid id)
         {
             var toDelete = await categoryService.DeleteCategory(id);
             if (toDelete == null)
