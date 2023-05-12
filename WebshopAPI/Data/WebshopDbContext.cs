@@ -14,5 +14,14 @@ namespace WebshopAPI.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Category> Categories { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>()
+                .HasData(
+                    new Role {Id = Guid.Parse("cc4e27d5-2a5d-41d3-8a16-52cb5d76689e"), Name = "user"},
+                    new Role {Id = Guid.Parse("073b6e00-c538-4869-af59-83ad5374f8a1"), Name = "manager"},
+                    new Role {Id = Guid.Parse("20147f57-964d-451d-98d9-3fd2e761aff7"), Name = "admin"}
+                );
+        }
     }
 }

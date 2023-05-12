@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebshopAPI.Data;
 
@@ -11,9 +12,11 @@ using WebshopAPI.Data;
 namespace WebshopAPI.Migrations
 {
     [DbContext(typeof(WebshopDbContext))]
-    partial class WebshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230512122941_RenamedUsernameToEmail")]
+    partial class RenamedUsernameToEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,23 +99,6 @@ namespace WebshopAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cc4e27d5-2a5d-41d3-8a16-52cb5d76689e"),
-                            Name = "user"
-                        },
-                        new
-                        {
-                            Id = new Guid("073b6e00-c538-4869-af59-83ad5374f8a1"),
-                            Name = "manager"
-                        },
-                        new
-                        {
-                            Id = new Guid("20147f57-964d-451d-98d9-3fd2e761aff7"),
-                            Name = "admin"
-                        });
                 });
 
             modelBuilder.Entity("WebshopAPI.Models.User", b =>
