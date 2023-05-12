@@ -50,6 +50,7 @@ builder.Services.AddScoped<RegisterInputValidator>();
 
 // SERVICES
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
