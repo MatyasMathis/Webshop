@@ -26,7 +26,7 @@ public class UserController : ControllerBase
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetAllUsers()
     {
-        return Ok(await _userService.GetAllAsync());
+        return Ok(await _userService.GetAllAsync<UserViewDto>());
     }
 
     [HttpPost]
