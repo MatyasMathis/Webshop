@@ -22,7 +22,7 @@ public class UserController : ControllerBase
 
     #region Public members
     [HttpGet]
-    [Route("/all")]
+    [Route("all")]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetAllUsers()
     {
@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/login")]
+    [Route("login")]
     public async Task<IActionResult> LoginAsync([FromBody] AuthenticationDto payload)
     {
         var (token, error) = await _userService.LoginAsync(payload);
@@ -40,7 +40,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/register")]
+    [Route("register")]
     public async Task<IActionResult> RegisterAsync([FromBody] AuthenticationDto payload)
     {
         var validationResult = await _userService.RegisterAsync(payload);

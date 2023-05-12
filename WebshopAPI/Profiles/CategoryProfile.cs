@@ -10,7 +10,7 @@ namespace WebshopAPI.Profiles
         public CategoryProfile()
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<CategoryDto, Category>().ReverseMap();
+            CreateMap<AddCategoryDto, Category>();
         }
         #endregion
     }

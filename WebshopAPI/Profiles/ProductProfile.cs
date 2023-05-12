@@ -10,7 +10,7 @@ namespace WebshopAPI.Profiles
         public ProductProfile()
         {
             CreateMap<Product, ProductDto>().ReverseMap();
-            CreateMap<ProductDto, Product>().ReverseMap();
+            CreateMap<UploadProductDto, Product>();
         }
         #endregion
     }

@@ -47,8 +47,8 @@ builder.Services.AddDbContext<WebshopDbContext>(options =>
 builder.Services.AddScoped<RegisterInputValidator>();
 
 // SERVICES
-builder.Services.AddScoped<CategoryService>();
-builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -70,7 +70,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             // ValidIssuer = builder.Configuration["Jwt:Issuer"],
             // ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ??
+                                       throw new InvalidOperationException(@"Missing Jwt key config")))
         });
 
 var app = builder.Build();

@@ -22,7 +22,7 @@ public abstract class GenericRepository<T> : IGenericRepository<T> where T : cla
     #endregion
 
     #region Constructors
-    public GenericRepository(WebshopDbContext webshopDbContext)
+    protected GenericRepository(WebshopDbContext webshopDbContext)
     {
         WebshopDbContext = webshopDbContext;
     }

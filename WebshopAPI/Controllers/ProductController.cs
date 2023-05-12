@@ -1,128 +1,67 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebshopAPI.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
 
 namespace WebshopAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class ProductController : ControllerBase
     {
         #region Fields
-        private readonly CategoryService categoryService;
-        private readonly IMapper mapper;
-        private readonly ProductService productService;
+        private readonly IProductService _productService;
         #endregion
 
         #region Constructors
-        public ProductController(ProductService productService, IMapper mapper, CategoryService categoryService)
+        public ProductController(IProductService productService)
         {
-            this.productService = productService;
-            this.mapper = mapper;
-            this.categoryService = categoryService;
+            _productService = productService;
         }
         #endregion
 
         #region Public members
         [HttpPost]
-        public async Task<IActionResult> AddProductAsync(UploadProductDto productDto)
+        [Route("add")]
+        public async Task<IActionResult> AddProductAsync(UploadProductDto payload)
         {
-            //Request to domain model
-            var product = new Product
-            {
-                Name = productDto.Name,
-                Description = productDto.Description,
-                Price = productDto.Price,
-                CategoryId = productDto.CategoryId,
-            };
-
-            //Pass deatails to Repository
-
-            await productService.UploadProduct(product);
-
-            //Convert back to DTO
-
-            var newProductDto = new ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                CategoryId = product.CategoryId
-            };
-            return Ok(newProductDto);
+            return Ok(await _productService.AddAsync(payload));
         }
 
         [HttpDelete]
-        [Route("{id:guid}")]
+        [Route("delete/{id:guid}")]
         public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid id)
         {
-            var toDelete = await productService.DeleteProduct(id);
-            if (toDelete == null)
-            {
-                return BadRequest();
-            }
-
-            var toDeleteDTO = mapper.Map<ProductDto>(toDelete);
-
-            return Ok(toDeleteDTO);
+            var result = await _productService.DeleteAsync(id);
+            if (result == false)
+                return BadRequest("Missing entity with given id.");
+            return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        [Route("all")]
+        public async Task<IActionResult> GetAllProductsAsync()
         {
-            var products = await productService.GetAllProducts();
-
-            var jsonOptions = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
-
-            var productsJson = JsonSerializer.Serialize(products, jsonOptions);
-
-            return Content(productsJson, "application/json");
+            return Ok(await _productService.GetAllAsync<ProductDto>());
         }
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetProduct([FromRoute] Guid id)
+        public async Task<IActionResult> GetProductByIdAsync([FromRoute] Guid id)
         {
-            var product = await productService.GetProductById(id);
+            var product = await _productService.GetByIdAsync<ProductDto>(id);
             if (product == null)
-            {
                 return BadRequest();
-            }
-            var productDto = new ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                CategoryId = product.CategoryId,
-                Category = product.Category
-            };
-            return Ok(productDto);
+            return Ok(product);
         }
 
         [HttpPut]
-        [Route("{id:guid}")]
+        [Route("update/{id:guid}")]
         public async Task<IActionResult> UpdateProduct(Guid id, ProductDto prodToUpdate)
         {
-            var prod = new Product
-            {
-                Id = id,
-                Name = prodToUpdate.Name,
-                Description = prodToUpdate.Description,
-                CategoryId = prodToUpdate.CategoryId
-            };
-            await productService.UpdateProduct(id, prod);
-
-            var prodDTO = mapper.Map<ProductDto>(prod);
-            return Ok(prodDTO);
+            var result = await _productService.UpdateAsync(id, prodToUpdate);
+            if (result == false)
+                return BadRequest("Missing entity with given id.");
+            return Ok();
         }
         #endregion
     }

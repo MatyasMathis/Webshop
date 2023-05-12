@@ -32,7 +32,8 @@ public class TokenService : ITokenService
         var claims = new List<Claim> { new(ClaimTypes.Email, user.Email) };
         claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name)));
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException(@"Missing Jwt key config");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

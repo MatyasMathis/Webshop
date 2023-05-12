@@ -1,95 +1,57 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebshopAPI.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
 
 namespace WebshopAPI.Controllers
 {
     [ApiController]
-    //[Route("Regions")]
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
         #region Fields
-        private readonly CategoryService categoryService;
-        private readonly IMapper mapper;
+        private readonly ICategoryService _categoryService;
         #endregion
 
         #region Constructors
-        public CategoryController(IMapper mapper, CategoryService categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
-            this.categoryService = categoryService;
-
-            this.mapper = mapper;
+            _categoryService = categoryService;
         }
         #endregion
 
         #region Public members
         [HttpPost]
+        [Route("add")]
         public async Task<IActionResult> AddCategoryAsync(AddCategoryDto categoryDto)
         {
-            //Request to domain model
-            var category = new Category
-            {
-                Name = categoryDto.Name,
-                Description = categoryDto.Description,
-            };
-
-            //Pass deatails to Repository
-
-            await categoryService.UploadCategory(category);
-
-            //Convert back to DTO
-
-            var newCategoryDto = new CategoryDto
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = categoryDto.Description,
-            };
-            return Ok(newCategoryDto);
+            return Ok(await _categoryService.AddAsync(categoryDto));
         }
 
         [HttpDelete]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteCatAsync([FromRoute] Guid id)
+        [Route("delete/{id:guid}")]
+        public async Task<IActionResult> DeleteCategoryAsync([FromRoute] Guid id)
         {
-            var toDelete = await categoryService.DeleteCategory(id);
-            if (toDelete == null)
-            {
-                return BadRequest();
-            }
-
-            var toDeleteDTO = mapper.Map<CategoryDto>(toDelete);
-
-            return Ok(toDeleteDTO);
+            var hasBeenDeleted = await _categoryService.DeleteAsync(id);
+            if (!hasBeenDeleted)
+                return BadRequest("No entry found with the given id");
+            return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
+        [Route("all")]
+        public async Task<IActionResult> GetAllCategoriesAsync()
         {
-            var categories = await categoryService.GetAllCategories();
-
-            var categoriesDTO = mapper.Map<List<CategoryDto>>(categories);
-
-            return Ok(categoriesDTO);
+            return Ok(await _categoryService.GetAllAsync<CategoryDto>());
         }
 
         [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateCategory(Guid id, CategoryDto catToUpdate)
+        [Route("update")]
+        public async Task<IActionResult> UpdateCategoryAsync(CategoryDto payload)
         {
-            var cat = new Category
-            {
-                Id = id,
-                Name = catToUpdate.Name,
-                Description = catToUpdate.Description,
-            };
-            await categoryService.UpdateCategory(id, cat);
-
-            var catDTO = mapper.Map<CategoryDto>(cat);
-            return Ok(catDTO);
+            var hasBeenUpdated = await _categoryService.UpdateAsync(payload.Id, payload);
+            if (!hasBeenUpdated)
+                return BadRequest("No entry found with the given id");
+            return Ok();
         }
         #endregion
     }
