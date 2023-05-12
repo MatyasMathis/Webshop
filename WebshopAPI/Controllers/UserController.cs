@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
@@ -10,21 +9,24 @@ namespace WebshopAPI.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
+    #region Fields
     private readonly IUserService _userService;
+    #endregion
 
+    #region Constructors
     public UserController(IUserService userService)
     {
         _userService = userService;
     }
+    #endregion
 
-    [HttpPost]
-    [Route("/register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] AuthenticationDto payload)
+    #region Public members
+    [HttpGet]
+    [Route("/all")]
+    [Authorize(Roles = "admin")]
+    public async Task<IActionResult> GetAllUsers()
     {
-        var validationResult = await _userService.RegisterAsync(payload);
-        if(validationResult.Count == 0)
-            return Ok();
-        return BadRequest(validationResult.Select(f => f.ErrorMessage));
+        return Ok(await _userService.GetAllAsync());
     }
 
     [HttpPost]
@@ -37,11 +39,14 @@ public class UserController : ControllerBase
         return Ok(token!);
     }
 
-    [HttpGet]
-    [Route("/all")]
-    [Authorize(Roles = "admin")]
-    public async Task<IActionResult> GetAllUsers()
+    [HttpPost]
+    [Route("/register")]
+    public async Task<IActionResult> RegisterAsync([FromBody] AuthenticationDto payload)
     {
-        return Ok(await _userService.GetAllAsync());
+        var validationResult = await _userService.RegisterAsync(payload);
+        if (validationResult.Count == 0)
+            return Ok();
+        return BadRequest(validationResult.Select(f => f.ErrorMessage));
     }
+    #endregion
 }

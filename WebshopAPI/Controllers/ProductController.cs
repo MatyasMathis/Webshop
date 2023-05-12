@@ -1,8 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using WebshopAPI.Models;
+using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
 
 namespace WebshopAPI.Controllers
@@ -11,16 +12,65 @@ namespace WebshopAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ProductService productService;
+        #region Fields
         private readonly CategoryService categoryService;
         private readonly IMapper mapper;
+        private readonly ProductService productService;
+        #endregion
+
+        #region Constructors
         public ProductController(ProductService productService, IMapper mapper, CategoryService categoryService)
         {
-                this.productService = productService;
-                this.mapper = mapper;
-                this.categoryService = categoryService;
+            this.productService = productService;
+            this.mapper = mapper;
+            this.categoryService = categoryService;
+        }
+        #endregion
+
+        #region Public members
+        [HttpPost]
+        public async Task<IActionResult> AddProductAsync(UploadProductDto productDto)
+        {
+            //Request to domain model
+            var product = new Product
+            {
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Price = productDto.Price,
+                CategoryId = productDto.CategoryId,
+            };
+
+            //Pass deatails to Repository
+
+            await productService.UploadProduct(product);
+
+            //Convert back to DTO
+
+            var newProductDto = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CategoryId = product.CategoryId
+            };
+            return Ok(newProductDto);
         }
 
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid id)
+        {
+            var toDelete = await productService.DeleteProduct(id);
+            if (toDelete == null)
+            {
+                return BadRequest();
+            }
+
+            var toDeleteDTO = mapper.Map<ProductDto>(toDelete);
+
+            return Ok(toDeleteDTO);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
@@ -35,37 +85,6 @@ namespace WebshopAPI.Controllers
             var productsJson = JsonSerializer.Serialize(products, jsonOptions);
 
             return Content(productsJson, "application/json");
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddProductAsync(Models.DTOs.UploadProductDto productDto)
-        {
-            //Request to domain model
-            var product = new Models.Product
-            {
-                Name = productDto.Name,
-                Description = productDto.Description,
-                Price= productDto.Price,
-                CategoryId= productDto.CategoryId,
-            };
-           
-            //Pass deatails to Repository
-
-            await productService.UploadProduct(product);
-
-            //Convert back to DTO
-
-            var newProductDto = new Models.DTOs.ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                CategoryId=product.CategoryId
-                
-            };
-            return Ok(newProductDto);
         }
 
         [HttpGet]
@@ -77,50 +96,34 @@ namespace WebshopAPI.Controllers
             {
                 return BadRequest();
             }
-            var productDto = new Models.DTOs.ProductDto
+            var productDto = new ProductDto
             {
                 Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
                 CategoryId = product.CategoryId,
-                Category=product.Category
-
+                Category = product.Category
             };
             return Ok(productDto);
         }
 
-        [HttpDelete]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid id)
-        {
-            var toDelete = await productService.DeleteProduct(id);
-            if (toDelete == null)
-            {
-                return BadRequest();
-            }
-
-            var toDeleteDTO = mapper.Map<Models.DTOs.ProductDto>(toDelete);
-
-            return Ok(toDeleteDTO);
-        }
-
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateProduct(Guid id, Models.DTOs.ProductDto prodToUpdate)
+        public async Task<IActionResult> UpdateProduct(Guid id, ProductDto prodToUpdate)
         {
-            var prod = new Models.Product
+            var prod = new Product
             {
                 Id = id,
                 Name = prodToUpdate.Name,
                 Description = prodToUpdate.Description,
-                CategoryId= prodToUpdate.CategoryId
-
+                CategoryId = prodToUpdate.CategoryId
             };
             await productService.UpdateProduct(id, prod);
 
-            var prodDTO = mapper.Map<Models.DTOs.ProductDto>(prod);
+            var prodDTO = mapper.Map<ProductDto>(prod);
             return Ok(prodDTO);
         }
+        #endregion
     }
 }

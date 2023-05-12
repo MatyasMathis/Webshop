@@ -1,11 +1,9 @@
 using System.Text;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebshopAPI.Data;
-using WebshopAPI.Models.DTOs;
 using WebshopAPI.Repositories;
 using WebshopAPI.Services;
 using WebshopAPI.Validators;
@@ -37,7 +35,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        {securityScheme, Array.Empty<string>() }
+        { securityScheme, Array.Empty<string>() }
     });
 });
 builder.Services.AddDbContext<WebshopDbContext>(options =>
@@ -59,7 +57,6 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

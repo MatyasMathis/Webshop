@@ -6,25 +6,30 @@ namespace WebshopAPI.Repositories;
 
 public interface IGenericRepository<T> where T : class, IIdentifiableByGuid
 {
-    Task<T?> GetById(Guid id);
-    Task<List<T>> GetAll();
-    Task<bool> DeleteAsync(Guid id);
-    Task<int> SaveAsync();
-
+    #region Public members
     Task AddAsync(T entity);
+    Task<bool> DeleteAsync(Guid id);
+    Task<List<T>> GetAll();
+    Task<T?> GetById(Guid id);
+    Task<int> SaveAsync();
+    #endregion
 }
 
 public abstract class GenericRepository<T> : IGenericRepository<T> where T : class, IIdentifiableByGuid
 {
+    #region Fields
     protected readonly WebshopDbContext WebshopDbContext;
+    #endregion
 
+    #region Constructors
     public GenericRepository(WebshopDbContext webshopDbContext)
     {
         WebshopDbContext = webshopDbContext;
     }
+    #endregion
 
-    public Task<T?> GetById(Guid id) => WebshopDbContext.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
-    public Task<List<T>> GetAll() => WebshopDbContext.Set<T>().ToListAsync();
+    #region Interface Implementations
+    public async Task AddAsync(T entity) => await WebshopDbContext.AddAsync(entity);
 
     public async Task<bool> DeleteAsync(Guid id)
     {
@@ -36,6 +41,8 @@ public abstract class GenericRepository<T> : IGenericRepository<T> where T : cla
         return true;
     }
 
+    public Task<List<T>> GetAll() => WebshopDbContext.Set<T>().ToListAsync();
+    public Task<T?> GetById(Guid id) => WebshopDbContext.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
     public Task<int> SaveAsync() => WebshopDbContext.SaveChangesAsync();
-    public async Task AddAsync(T entity) => await WebshopDbContext.AddAsync(entity);
+    #endregion
 }

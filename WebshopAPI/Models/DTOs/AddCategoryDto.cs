@@ -2,7 +2,9 @@
 {
     public class AddCategoryDto
     {
-        public string Name { get; set; }
+        #region Properties and Indexers
         public string Description { get; set; }
+        public string Name { get; set; }
+        #endregion
     }
 }

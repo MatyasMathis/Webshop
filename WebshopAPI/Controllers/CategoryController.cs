@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebshopAPI.Repositories;
+using WebshopAPI.Models;
+using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
 
 namespace WebshopAPI.Controllers
@@ -11,26 +11,30 @@ namespace WebshopAPI.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
+        #region Fields
         private readonly CategoryService categoryService;
         private readonly IMapper mapper;
-        
+        #endregion
+
+        #region Constructors
         public CategoryController(IMapper mapper, CategoryService categoryService)
         {
             this.categoryService = categoryService;
 
             this.mapper = mapper;
         }
+        #endregion
 
+        #region Public members
         [HttpPost]
-        public async Task<IActionResult> AddCategoryAsync(Models.DTOs.AddCategoryDto categoryDto)
+        public async Task<IActionResult> AddCategoryAsync(AddCategoryDto categoryDto)
         {
             //Request to domain model
-            var category = new Models.Category
+            var category = new Category
             {
-                Name= categoryDto.Name,
-                Description= categoryDto.Description,
+                Name = categoryDto.Name,
+                Description = categoryDto.Description,
             };
-
 
             //Pass deatails to Repository
 
@@ -38,25 +42,13 @@ namespace WebshopAPI.Controllers
 
             //Convert back to DTO
 
-            var newCategoryDto = new Models.DTOs.CategoryDto
+            var newCategoryDto = new CategoryDto
             {
                 Id = category.Id,
-               Name= category.Name,
-               Description= categoryDto.Description,
+                Name = category.Name,
+                Description = categoryDto.Description,
             };
             return Ok(newCategoryDto);
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
-        {
-            var categories=await categoryService.GetAllCategories();
-
-            var categoriesDTO = mapper.Map<List<Models.DTOs.CategoryDto>>(categories);
-
-            return Ok(categoriesDTO);
-
         }
 
         [HttpDelete]
@@ -69,26 +61,36 @@ namespace WebshopAPI.Controllers
                 return BadRequest();
             }
 
-            var toDeleteDTO = mapper.Map<Models.DTOs.CategoryDto>(toDelete);
+            var toDeleteDTO = mapper.Map<CategoryDto>(toDelete);
 
             return Ok(toDeleteDTO);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await categoryService.GetAllCategories();
+
+            var categoriesDTO = mapper.Map<List<CategoryDto>>(categories);
+
+            return Ok(categoriesDTO);
+        }
+
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateCategory(Guid id, Models.DTOs.CategoryDto catToUpdate)
+        public async Task<IActionResult> UpdateCategory(Guid id, CategoryDto catToUpdate)
         {
-            var cat = new Models.Category
+            var cat = new Category
             {
                 Id = id,
-                Name= catToUpdate.Name,
-                Description= catToUpdate.Description,
-
+                Name = catToUpdate.Name,
+                Description = catToUpdate.Description,
             };
             await categoryService.UpdateCategory(id, cat);
 
-            var catDTO = mapper.Map<Models.DTOs.CategoryDto>(cat);
+            var catDTO = mapper.Map<CategoryDto>(cat);
             return Ok(catDTO);
         }
+        #endregion
     }
 }

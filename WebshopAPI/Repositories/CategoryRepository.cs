@@ -6,15 +6,23 @@ namespace WebshopAPI.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
+        #region Fields
         private readonly WebshopDbContext webshopDbContext;
-        public CategoryRepository(WebshopDbContext webshopDbContext) { 
+        #endregion
+
+        #region Constructors
+        public CategoryRepository(WebshopDbContext webshopDbContext)
+        {
             this.webshopDbContext = webshopDbContext;
         }
+        #endregion
 
+        #region Interface Implementations
         public async Task<Category> DeleteCategory(Guid id)
         {
-            var categoryToDelete=await webshopDbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
-            if (categoryToDelete == null) {
+            var categoryToDelete = await webshopDbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (categoryToDelete == null)
+            {
                 return null;
             }
 
@@ -56,5 +64,6 @@ namespace WebshopAPI.Repositories
             await webshopDbContext.SaveChangesAsync();
             return category;
         }
+        #endregion
     }
 }

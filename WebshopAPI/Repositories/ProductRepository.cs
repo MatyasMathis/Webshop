@@ -6,14 +6,18 @@ namespace WebshopAPI.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-
+        #region Fields
         private readonly WebshopDbContext webshopDbContext;
+        #endregion
 
+        #region Constructors
         public ProductRepository(WebshopDbContext webshopDbContext)
         {
             this.webshopDbContext = webshopDbContext;
         }
+        #endregion
 
+        #region Interface Implementations
         public async Task<Product> DeleteProduct(Guid id)
         {
             var productToDelete = await webshopDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
@@ -30,7 +34,7 @@ namespace WebshopAPI.Repositories
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
             return await webshopDbContext.Products
-                .Include(x=>x.Category)
+                .Include(x => x.Category)
                 .ToListAsync();
         }
 
@@ -40,7 +44,7 @@ namespace WebshopAPI.Repositories
             {
                 return null;
             }
-            return await webshopDbContext.Products.Include(x=>x.Category).FirstOrDefaultAsync(x=>x.Id == id);
+            return await webshopDbContext.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Product> UpdateProduct(Guid id, Product product)
@@ -50,10 +54,10 @@ namespace WebshopAPI.Repositories
             {
                 return null;
             }
-            prodToUpdate.Name=product.Name;
-            prodToUpdate.Description=product.Description;
-            prodToUpdate.CategoryId=product.CategoryId;
-            prodToUpdate.Price=product.Price;
+            prodToUpdate.Name = product.Name;
+            prodToUpdate.Description = product.Description;
+            prodToUpdate.CategoryId = product.CategoryId;
+            prodToUpdate.Price = product.Price;
             await webshopDbContext.SaveChangesAsync();
             return prodToUpdate;
         }
@@ -65,5 +69,6 @@ namespace WebshopAPI.Repositories
             await webshopDbContext.SaveChangesAsync();
             return product;
         }
+        #endregion
     }
 }

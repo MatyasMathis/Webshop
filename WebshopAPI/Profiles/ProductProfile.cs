@@ -1,12 +1,17 @@
 ﻿using AutoMapper;
+using WebshopAPI.Models;
+using WebshopAPI.Models.DTOs;
+
 namespace WebshopAPI.Profiles
 {
-    public class ProductProfile:Profile
+    public class ProductProfile : Profile
     {
+        #region Constructors
         public ProductProfile()
         {
-            CreateMap<Models.Product, Models.DTOs.ProductDto>().ReverseMap();
-            CreateMap<Models.DTOs.ProductDto,Models.Product >().ReverseMap();
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<ProductDto, Product>().ReverseMap();
         }
+        #endregion
     }
 }

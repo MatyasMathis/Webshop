@@ -2,9 +2,11 @@
 {
     public class User : IIdentifiableByGuid
     {
-        public Guid Id { get; set; }
+        #region Properties and Indexers
         public string Email { get; set; }
+        public Guid Id { get; set; }
         public string Password { get; set; }
         public List<Role> Roles { get; set; }
+        #endregion
     }
 }
