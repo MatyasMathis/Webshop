@@ -1,6 +1,6 @@
 ﻿namespace WebshopAPI.Models
 {
-    public class Category
+    public class Category : IIdentifiableByGuid
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
