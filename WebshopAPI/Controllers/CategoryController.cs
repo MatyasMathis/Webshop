@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
 
@@ -22,6 +23,7 @@ namespace WebshopAPI.Controllers
         #region Public members
         [HttpPost]
         [Route("add")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddCategoryAsync(AddCategoryDto categoryDto)
         {
             return Ok(await _categoryService.AddAsync(categoryDto));
@@ -29,6 +31,7 @@ namespace WebshopAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id:guid}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCategoryAsync([FromRoute] Guid id)
         {
             var hasBeenDeleted = await _categoryService.DeleteAsync(id);
@@ -46,6 +49,7 @@ namespace WebshopAPI.Controllers
 
         [HttpPut]
         [Route("update")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCategoryAsync(CategoryDto payload)
         {
             var hasBeenUpdated = await _categoryService.UpdateAsync(payload.Id, payload);

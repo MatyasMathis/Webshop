@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
 
@@ -22,6 +23,7 @@ namespace WebshopAPI.Controllers
         #region Public members
         [HttpPost]
         [Route("add")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddProductAsync(UploadProductDto payload)
         {
             return Ok(await _productService.AddAsync(payload));
@@ -29,6 +31,7 @@ namespace WebshopAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id:guid}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid id)
         {
             var result = await _productService.DeleteAsync(id);
@@ -56,6 +59,7 @@ namespace WebshopAPI.Controllers
 
         [HttpPut]
         [Route("update/{id:guid}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateProduct(Guid id, ProductDto prodToUpdate)
         {
             var result = await _productService.UpdateAsync(id, prodToUpdate);
