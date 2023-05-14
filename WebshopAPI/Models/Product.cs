@@ -4,7 +4,7 @@
     {
         #region Properties and Indexers
         //Navigation Properties
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
         public Guid CategoryId { get; set; }
         public string Description { get; set; }
         public Guid Id { get; set; }

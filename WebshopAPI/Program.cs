@@ -40,6 +40,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddDbContext<WebshopDbContext>(options =>
 {
+    options.UseLazyLoadingProxies();
     options.UseSqlServer(builder.Configuration.GetConnectionString("Webshop"));
 });
 
@@ -50,6 +51,7 @@ builder.Services.AddScoped<RegisterInputValidator>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 // REPOSITORIES
