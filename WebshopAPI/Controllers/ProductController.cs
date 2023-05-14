@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.Models.DTOs;
 using WebshopAPI.Services;
@@ -29,6 +30,18 @@ namespace WebshopAPI.Controllers
             return Ok(await _productService.AddAsync(payload));
         }
 
+        [HttpPost]
+        [Route("buy")]
+        [Authorize(Roles = "user,admin")]
+        public async Task<IActionResult> BuyProductAsync([FromBody] BuyProductDto payload)
+        {
+            var userEmail = User.Claims.First(i => i.Type == ClaimTypes.Email).Value;
+            var result = await _productService.BuyProductAsync(userEmail, payload);
+            if (result == false)
+                return BadRequest("Invalid user or product id.");
+            return Ok();
+        }
+
         [HttpDelete]
         [Route("delete/{id:guid}")]
         [Authorize(Roles = "admin")]
@@ -55,6 +68,13 @@ namespace WebshopAPI.Controllers
             if (product == null)
                 return BadRequest();
             return Ok(product);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> SearchProductsAsync(string searchString)
+        {
+            return Ok(await _productService.SearchProductsAsync(searchString));
         }
 
         [HttpPut]
